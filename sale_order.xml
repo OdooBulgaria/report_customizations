@@ -1,0 +1,15 @@
+<openerp>
+	<data>
+        <record id="view_sale_order_discount" model="ir.ui.view">
+            <field name="name">sale order discount total</field>
+            <field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>            
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<xpath expr = "/form/sheet/notebook/page[@string='Order Lines']/group/field[@name='amount_untaxed']" position ='before'>
+            		<field name = 'discount_total' groups="sale.group_discount_per_so_line"/>
+            	</xpath>
+            </field>
+       </record>
+    </data>
+</openerp>
