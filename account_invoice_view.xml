@@ -7,8 +7,8 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
             	<xpath expr = "/form/sheet/notebook/page[@string='Invoice Lines']/group/field[@name='amount_untaxed']" position ='before'>
-            		<field name = 'before_discount_total' groups="sale.group_discount_per_so_line"/>
-            		<field name = 'discount_total' groups="sale.group_discount_per_so_line"/>
+            		<field name = 'before_discount_total' groups="sale.group_discount_per_so_line" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+            		<field name = 'discount_total' groups="sale.group_discount_per_so_line" widget="monetary" options="{'currency_field': 'currency_id'}"/>
             		<field name = 'global_discount'/>
             	</xpath>
             </field>
