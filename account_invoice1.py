@@ -15,8 +15,7 @@ class account_invoice(models.Model):
         self.amount_tax = sum(line.amount for line in self.tax_line)
         self.amount_total = self.amount_untaxed + self.amount_tax
         global_discount=self.global_discount
-        print"====================",self.global_discount
-        if "%" in self.global_discount:
+        if "%" in global_discount:
             global_discount=global_discount.split("%")
             global_discount=float(global_discount[0])
             global_percent=(self.amount_untaxed*global_discount)/100

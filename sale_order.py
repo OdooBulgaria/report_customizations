@@ -3,10 +3,9 @@ import openerp.addons.decimal_precision as dp
 
 class sale_order(models.Model):
     _inherit = 'sale.order'
-    
-
-    
-    
+    _defaults={
+               "global_discount":0.0
+               }
     @api.one
     @api.depends('order_line.discount','order_line.product_uom_qty','order_line.price_unit')
     def _compute_discount(self):
