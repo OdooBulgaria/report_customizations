@@ -8,14 +8,19 @@ class sale_order(osv.osv):
     
     def _amount_all_wrappers(self, cr, uid, ids, field_name, arg, context=None):
         """ Wrapper because of direct method passing as parameter for function fields """
-        print "===========================++++++++++++++++++++shivam+==",cr, uid, ids, field_name, arg
-       #print "======================================trial",self._amount_all(cr, uid, ids, field_name, arg, context=context)
         a=self._amount_all(cr, uid, ids, field_name, arg, context=context)
         obj=self.pool.get("sale.order").browse(cr,uid,ids,context)
         global_discount=obj.global_discount
+        global_discount_amount=obj.global_discount_amount
         for i in a:
-            if "%" in global_discount:
-                global_discount=global_discount.split("%")
+                #untaxed_amounts=(a[i].get("before_discount_total"))-(a[i].get("discount_total"))
+                untaxed_amounts=obj.before_discount_total-obj.discount_total
+                amount_tax=a[i].get("amount_tax")
+                untaxed_amounts=untaxed_amounts-global_discount_amount
+                amount_total=untaxed_amounts+amount_tax
+                a[i]["amount_untaxed"]=untaxed_amounts
+                a[i]["amount_total"]=amount_total
+                '''global_discount=global_discount.split("%")
                 global_discount=float(global_discount[0])
                 untaxed_amount=a[i].get("amount_untaxed")
                 global_percent=(untaxed_amount* global_discount)/100
@@ -23,17 +28,9 @@ class sale_order(osv.osv):
                 a[i]["amount_untaxed"]=untaxed_amount
                 amount_tax=a[i].get("amount_tax")
                 amount_total=untaxed_amount+amount_tax
-                a[i]["amount_total"]=amount_total
-            else:
-                untaxed_amount=a[i].get("amount_untaxed")
-                amount_tax=a[i].get("amount_tax")
-                untaxed_amount=untaxed_amount-float(global_discount)
-                amount_total=untaxed_amount+amount_tax
-                print"bbbbbbbbbbbb",untaxed_amount
-                a[i]["amount_untaxed"]=untaxed_amount
-                a[i]["amount_total"]=amount_total
+                a[i]["amount_total"]=amount_total'''
             
-        print"splitttttttttttttttt",global_discount
+            
         """for i in a:
            # print"iiiiiiiiiiiii",a[i].get("amount_untaxed")
            # print"iiiiiiiiiiiii",a.get(i,False)
@@ -55,7 +52,23 @@ class sale_order(osv.osv):
         for line in self.pool.get('sale.order.line').browse(cr, uid, ids, context=context):
             result[line.order_id.id] = True
         return result.keys()
-                                
+    
+    def calculate_percent(self,cr,uid,ids,global_discount_amount,before_discount_total,discount_total,context=None):
+        res={}
+        try:
+            amount=(global_discount_amount*100)/(before_discount_total-discount_total)
+            #print"============================  amount",amount
+            res['global_discount']=amount
+        except:print"divisin by zero"
+        return {'value':res}
+        
+    
+    def global_discount1(self,cr,uid,ids,global_discount,before_discount_total,discount_total,context=None):
+        res={}
+        percent_amount=(global_discount*(before_discount_total-discount_total))/100
+        res['global_discount_amount']=percent_amount
+        return {'value':res}
+    
     
     _columns={
               'amount_untaxed': fields.function(_amount_all_wrappers, digits_compute=dp.get_precision('Account'), string='Untaxed Amount',
@@ -77,6 +90,10 @@ class sale_order(osv.osv):
             },multi='sums', help="The total amount."),
 
         }
+    
+   
+         
+        
                                         
    
     
