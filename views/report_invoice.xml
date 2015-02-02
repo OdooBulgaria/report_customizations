@@ -84,19 +84,25 @@
                                 <span t-field="o.before_discount_total" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
                             </td>
                         </tr>   
-                        <tr class="border-black" groups="sale.group_discount_per_so_line">
+                        <tr class="border-black" groups="sale.group_discount_per_so_line" t-if="o.discount_total!=0.00">
 							<td>Line Discount</td>
                             <td class="text-right">
                                 <span t-field="o.discount_total" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
                             </td>
                         </tr>    
-                         <tr class="border-black" groups="sale.group_discount_per_so_line">
-							<td>Global Discount</td>
+                         <tr class="border-black" groups="sale.group_discount_per_so_line" t-if="o.global_discount!=0.00">
+							<td  t-if="o.global_discount!=0.00">Global Discount(%)</td>
                             <td class="text-right">
                                 <span t-field="o.global_discount"/>
                             </td>
+                         </tr>
+                         <tr class="border-black" groups="sale.group_discount_per_so_line" t-if="o.global_discount_amount!=0.00">
+							<td>Global Discount</td>
+                            <td class="text-right">
+                                <span t-field="o.global_discount_amount"/>
+                            </td>
                         </tr>                    
-                        <tr class="border-black">
+                        <tr class="border-black" t-if="o.global_discount_amount!=0.00 and o.global_discount!=0.00 and o.global_discount!=0.00">
                             <td><strong>Total Without Taxes</strong></td>
                             <td class="text-right">
                                 <span t-field="o.amount_untaxed" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>

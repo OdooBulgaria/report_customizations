@@ -9,7 +9,8 @@
             	<xpath expr = "/form/sheet/notebook/page[@string='Invoice Lines']/group/field[@name='amount_untaxed']" position ='before'>
             		<field name = 'before_discount_total' groups="sale.group_discount_per_so_line" widget="monetary" options="{'currency_field': 'currency_id'}"/>
             		<field name = 'discount_total' groups="sale.group_discount_per_so_line" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-            		<field name = 'global_discount'/>
+            		<field name = 'global_discount' on_change = "global_discount1(global_discount,before_discount_total,discount_total)"/>
+            		<field name = 'global_discount_amount' on_change="calculate_percent(global_discount_amount,before_discount_total,discount_total)" widget="monetary" options="{'currency_field': 'currency_id'}"/>
             	</xpath>
             </field>
        </record>

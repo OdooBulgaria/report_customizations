@@ -20,6 +20,7 @@ class sale_order(models.Model):
                                   digits= dp.get_precision('Discount'))
     before_discount_total = fields.Float(string='Amount', store=True, readonly=True, compute='_compute_amount', track_visibility='always',
                                   digits= dp.get_precision('Account'))
-    global_discount=fields.Char("Global Discount")
+    global_discount=fields.Float("Global Discount(%)")
+    global_discount_amount=fields.Float("Global Discount")
     
     
